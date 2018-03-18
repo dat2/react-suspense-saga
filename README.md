@@ -23,10 +23,10 @@ import { call, render } from 'react-suspense-saga/effects'
 import Api from './Api'
 
 function* greeter() {
+  yield render(
+    <p>Loading...</p>
+  )
   try {
-    yield render(
-      <p>Loading...</p>
-    )
     const user = yield call(Api.fetchUser)
     yield render(
       <p>

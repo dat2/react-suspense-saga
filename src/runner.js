@@ -5,18 +5,33 @@ function run(createGenerator) {
     constructor(...args) {
       super(...args)
       this.generator = createGenerator()
-      try {
-        const { value, done } = this.generator.next()
-        if (value.type === 'RENDER') {
-          this.state = {
-            node: value.node
-          }
-        } else {
-          this.state = {
-            node: null
-          }
+      const { value, done } = this.generator.next()
+      if (!done && value.type === 'RENDER') {
+        this.state = {
+          node: value.node
         }
-      } catch (e) {}
+      } else {
+        this.state = {
+          node: null
+        }
+      }
+    }
+
+    componentDidMount() {
+      this.stepGenerator()
+    }
+
+    stepGenerator() {
+      const { value, done } = this.generator.next()
+      if (done) {
+        this.generator = null
+      } else if (value.type === 'RENDER') {
+        this.setState({
+          node: value.node
+        })
+      } else if (value.type === 'CALL') {
+        // TODO
+      }
     }
 
     render() {

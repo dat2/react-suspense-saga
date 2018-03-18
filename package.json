@@ -1,5 +1,5 @@
 {
-  "name": "react-saga",
+  "name": "react-suspense-saga",
   "version": "0.1.0",
   "description": "redux-saga + react",
   "main": "lib/index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dat2/react-saga.git"
+    "url": "git+https://github.com/dat2/react-suspense-saga.git"
   },
   "keywords": [
     "react",
@@ -17,9 +17,9 @@
   "author": "Nick Dujay",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dat2/react-saga/issues"
+    "url": "https://github.com/dat2/react-suspense-saga/issues"
   },
-  "homepage": "https://github.com/dat2/react-saga#readme",
+  "homepage": "https://github.com/dat2/react-suspense-saga#readme",
   "peerDependencies": {
     "react": "^16.2.0"
   },

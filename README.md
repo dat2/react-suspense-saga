@@ -122,6 +122,7 @@ You can use this with `redux`, or any component that will change the props like
 this:
 ```js
 const AsyncGreeting = runner(function*() {
+  // the while true is so that the generator runs forever
   while (true) {
     const { loading, name } = yield takeProps()
     if (loading) {

@@ -14,7 +14,7 @@ function run(createGenerator) {
       this.generator = createGenerator()
       this.state = {
         state: INITIAL,
-        node: null,
+        node: null
       }
     }
 
@@ -29,7 +29,7 @@ function run(createGenerator) {
     }
 
     async setStatePromise(state) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         this.setState(state, resolve)
       })
     }
@@ -42,10 +42,10 @@ function run(createGenerator) {
       } else if (effect.type === 'RENDER') {
         const node = React.isValidElement(effect.nodeOrComponent)
           ? React.cloneElement(effect.nodeOrComponent, effect.extraProps)
-          : React.createElement(effect.nodeOrComponent, {
-            ...props,
-            ...effect.extraProps
-          })
+          : React.createElement(
+              effect.nodeOrComponent,
+              Object.assign({}, props, effect.extraProps)
+            )
 
         await this.setStatePromise({
           state: RENDERING,
@@ -65,7 +65,9 @@ function run(createGenerator) {
           state: WAITING_FOR_PROMISE
         })
         try {
-          const value = await effect.fn.apply(effect.fn, effect.fn.args)
+          const value = await (Array.isArray(effect.fn)
+            ? effect.fn[0].call(effect.fn[1], effect.args)
+            : effect.fn.call(null, effect.args))
           await this.advance(this.generator.next(value), props)
         } catch (error) {
           await this.advance(this.generator.throw(error), props)

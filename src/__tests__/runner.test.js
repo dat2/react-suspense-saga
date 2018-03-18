@@ -59,7 +59,11 @@ describe('runner', () => {
   })
 
   it('will pass extra props', () => {
-    const Greeting = props => <p>Hello {props.firstName}, {props.lastname}</p>
+    const Greeting = props => (
+      <p>
+        Hello {props.firstName}, {props.lastname}
+      </p>
+    )
 
     const GreetingRunner = runner(function*() {
       yield render(Greeting, { lastName: 'dole' })
@@ -92,7 +96,7 @@ describe('runner', () => {
   it('will run the call effect properly', async () => {
     const AsyncGreeting = runner(function*() {
       const { name } = yield call(() => Promise.resolve({ name: 'nick' }))
-      yield render(<p>Hello { name }</p>)
+      yield render(<p>Hello {name}</p>)
     })
 
     const wrapper = shallow(<AsyncGreeting />)
@@ -105,7 +109,7 @@ describe('runner', () => {
     const AsyncFailedGreeting = runner(function*() {
       try {
         const { name } = yield call(() => Promise.reject(new Error('nick')))
-        yield render(<p>Hello { name }</p>)
+        yield render(<p>Hello {name}</p>)
       } catch (e) {
         yield render(<p>Oops, something went wrong</p>)
       }

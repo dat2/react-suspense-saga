@@ -2,8 +2,10 @@
   "name": "react-suspense-saga",
   "version": "0.1.0",
   "description": "redux-saga + react",
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
+  "module": "./src/index.js",
   "scripts": {
+    "prepublishOnly": "make lib",
     "test": "make test"
   },
   "repository": {

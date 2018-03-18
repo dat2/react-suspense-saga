@@ -12,6 +12,10 @@ node_modules: package.json
 test: node_modules
 	jest
 
+.PHONY: lint-fix
+lint-fix: node_modules
+	eslint --fix "./src/**/*.js"
+
 .PHONY: clean
 clean:
 	-rm -rf node_modules

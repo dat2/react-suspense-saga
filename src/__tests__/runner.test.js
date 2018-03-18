@@ -1,7 +1,5 @@
-import runner from '../runner'
+import runner from "../runner";
 
-describe('runner', () => {
-  it('works', () => {
-
-  })
-})
+describe("runner", () => {
+  it("works", () => {});
+});

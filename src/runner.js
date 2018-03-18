@@ -1,22 +1,19 @@
-// @flow
-import React from 'react'
+import React from "react";
 
 function run(saga) {
   class Runner extends React.Component {
     state = {
       node: null
-    }
+    };
 
-    componentWillMount() {
-
-    }
+    componentWillMount() {}
 
     render() {
-      return this.state.node
+      return this.state.node;
     }
   }
 
-  return Runner
+  return Runner;
 }
 
-export default run
+export default run;

@@ -45,7 +45,8 @@ function* greeter() {
 export default runner(greeter)
 ```
 
-# Demos
+# Examples
+- [Async](examples/Async.js)
 
 # API Documentation
 
@@ -95,7 +96,7 @@ const MyComponent = runner(function*() {
 ```js
 render(
   node: React.Node | React.Component,
-  extraArgs: Object?
+  extraProps: Object?
 ): Effect
 ```
 
@@ -108,6 +109,7 @@ const Loading = () => <p>Loading...</p>
 const MyComponent = runner(function*() {
   yield render(Loading) // props for MyComponent will get forwarded to this
   yield render(<p>my component</p>)
+  yield render(MyOtherComponent, { name: 'nick' })
 })
 ```
 
@@ -116,14 +118,14 @@ const MyComponent = runner(function*() {
 takeProps(): Effect
 ```
 
-This is a blocking effect, that will not advance the generator until the props
-have changed.
+This will hook into the `componentWillReceiveProps` lifecycle method, and block your
+saga until the props have changed. It will also receive the initial props on
+`componentDidMount`.
 
-You can use this with `redux`, or any component that will change the props like
-this:
+eg.
 ```js
-const AsyncGreeting = runner(function*() {
-  // the while true is so that the generator runs forever
+const GreetingWithProps = runner(function*() {
+  // Every time the props change, we will re-render
   while (true) {
     const { loading, name } = yield takeProps()
     if (loading) {

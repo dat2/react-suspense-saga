@@ -18,7 +18,7 @@ yarn add react-suspense-saga
 ## Quick Example
 ```jsx
 import runner from 'react-suspense-saga'
-import { call, render } from 'react-suspense-saga/effects'
+import { call, render } from 'react-suspense-saga/lib/effects'
 
 import Api from './Api'
 

@@ -64,14 +64,14 @@ function run(createGenerator) {
         await this.setStatePromise({
           state: WAITING_FOR_PROMISE
         })
-        try {
-          const value = await (Array.isArray(effect.fn)
+        const promise = (Array.isArray(effect.fn)
             ? effect.fn[0].call(effect.fn[1], effect.args)
             : effect.fn.call(null, effect.args))
-          await this.advance(this.generator.next(value), props)
-        } catch (error) {
-          await this.advance(this.generator.throw(error), props)
-        }
+
+        await promise.then(
+          value => this.advance(this.generator.next(value), props),
+          error => this.advance(this.generator.throw(error), props)
+        );
       }
     }
 

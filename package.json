@@ -1,0 +1,33 @@
+{
+  "name": "react-saga",
+  "version": "0.1.0",
+  "description": "redux-saga + react",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dat2/react-saga.git"
+  },
+  "keywords": [
+    "react",
+    "saga"
+  ],
+  "author": "Nick Dujay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dat2/react-saga/issues"
+  },
+  "homepage": "https://github.com/dat2/react-saga#readme",
+  "peerDependencies": {
+    "react": "^16.2.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "jest": "^22.4.2",
+    "react": "^16.2.0"
+  }
+}

@@ -4,17 +4,11 @@ function run(createGenerator) {
   class Runner extends React.Component {
     constructor(...args) {
       super(...args)
+      this.stepGenerator = this.stepGenerator.bind(this)
+      this.getNextState = this.getNextState.bind(this)
+
       this.generator = createGenerator()
-      const { value, done } = this.generator.next()
-      if (!done && value.type === 'RENDER') {
-        this.state = {
-          node: value.node
-        }
-      } else {
-        this.state = {
-          node: null
-        }
-      }
+      this.state = this.getNextState()
     }
 
     componentDidMount() {
@@ -22,15 +16,27 @@ function run(createGenerator) {
     }
 
     stepGenerator() {
-      const { value, done } = this.generator.next()
+      this.setState(this.getNextState)
+    }
+
+    getNextState(prevState) {
+      const { value: effect, done } = this.generator.next()
       if (done) {
-        this.generator = null
-      } else if (value.type === 'RENDER') {
-        this.setState({
-          node: value.node
-        })
-      } else if (value.type === 'CALL') {
-        // TODO
+        return { done }
+      } else if (effect.type === 'RENDER') {
+        return {
+          done,
+          node: effect.node
+        }
+      } else if (effect.type === 'DELAY') {
+        setTimeout(this.stepGenerator, effect.ms)
+        return {
+          done
+        }
+      } else {
+        return {
+          done
+        }
       }
     }
 

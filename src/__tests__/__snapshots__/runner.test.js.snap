@@ -1,15 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`runner render works for empty sagas 1`] = `""`;
+exports[`runner works for empty sagas 1`] = `""`;
 
-exports[`runner render works for multiple renders 1`] = `
+exports[`runner works for multiple initial renders 1`] = `
 <div>
-  second render
+  second initial render
 </div>
 `;
 
-exports[`runner render works for the initial render 1`] = `
+exports[`runner works for the initial render 1`] = `
 <div>
   initial render
+</div>
+`;
+
+exports[`runner works when the initial render is delayed 1`] = `
+<div>
+  initial render
+</div>
+`;
+
+exports[`runner works with multiple delayed renders 1`] = `
+<div>
+  second render
 </div>
 `;

@@ -1,6 +1,9 @@
 # Overview
 A React component that renders the results of an ES2015 generator.
 
+The *suspense* is killing me, so I decided to explore this before React implements
+it themselves!
+
 # Getting started
 
 ## Install

@@ -1,2 +1,2 @@
-import run from "./runner";
-export default run;
+import run from './runner'
+export default run

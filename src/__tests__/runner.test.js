@@ -58,6 +58,17 @@ describe('runner', () => {
     expect(wrapper).toMatchSnapshot()
   })
 
+  it('will pass extra props', () => {
+    const Greeting = props => <p>Hello {props.firstName}, {props.lastname}</p>
+
+    const GreetingRunner = runner(function*() {
+      yield render(Greeting, { lastName: 'dole' })
+    })
+
+    const wrapper = shallow(<GreetingRunner firstName="nick" />)
+    expect(wrapper).toMatchSnapshot()
+  })
+
   it('will pass props to the takeProps effect', async () => {
     const Greeting = runner(function*() {
       while (true) {

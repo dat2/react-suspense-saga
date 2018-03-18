@@ -12,6 +12,13 @@ exports[`runner will handle a rejected call effect properly 1`] = `
 </p>
 `;
 
+exports[`runner will pass extra props 1`] = `
+<Greeting
+  firstName="nick"
+  lastName="dole"
+/>
+`;
+
 exports[`runner will pass props to a ES2015 class component 1`] = `
 <GreetingClass
   name="nick"

@@ -41,8 +41,11 @@ function run(createGenerator) {
         })
       } else if (effect.type === 'RENDER') {
         const node = React.isValidElement(effect.nodeOrComponent)
-          ? effect.nodeOrComponent
-          : React.createElement(effect.nodeOrComponent, props)
+          ? React.cloneElement(effect.nodeOrComponent, effect.extraProps)
+          : React.createElement(effect.nodeOrComponent, {
+            ...props,
+            ...effect.extraProps
+          })
 
         await this.setStatePromise({
           state: RENDERING,

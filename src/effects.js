@@ -1,7 +1,8 @@
-export function render(nodeOrComponent) {
+export function render(nodeOrComponent, extraProps = {}) {
   return {
     type: 'RENDER',
-    nodeOrComponent
+    nodeOrComponent,
+    extraProps
   }
 }
 

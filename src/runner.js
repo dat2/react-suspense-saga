@@ -3,6 +3,7 @@ import React from 'react'
 const INITIAL = Symbol('INITIAL')
 const RENDERING = Symbol('RENDERING')
 const WAITING_FOR_PROPS = Symbol('WAITING_FOR_PROPS')
+const WAITING_FOR_PROMISE = Symbol('WAITING_FOR_PROMISE')
 const DONE = Symbol('DONE')
 
 function run(createGenerator) {
@@ -14,11 +15,10 @@ function run(createGenerator) {
       this.state = {
         state: INITIAL,
         node: null,
-        data: null
       }
     }
 
-    componentWillMount() {
+    componentDidMount() {
       this.advance(this.generator.next(), this.props)
     }
 
@@ -28,7 +28,13 @@ function run(createGenerator) {
       }
     }
 
-    advance({ value: effect, done }, props) {
+    async setStatePromise(state) {
+      return new Promise((resolve) => {
+        this.setState(state, resolve)
+      })
+    }
+
+    async advance({ value: effect, done }, props) {
       if (done) {
         this.setState({
           state: DONE
@@ -38,22 +44,28 @@ function run(createGenerator) {
           ? effect.nodeOrComponent
           : React.createElement(effect.nodeOrComponent, props)
 
-        this.setState(
-          {
-            state: RENDERING,
-            node
-          },
-          () => {
-            this.advance(this.generator.next(), props)
-          }
-        )
+        await this.setStatePromise({
+          state: RENDERING,
+          node
+        })
+        await this.advance(this.generator.next(), props)
       } else if (effect.type === 'TAKE_PROPS') {
         if (this.state.state === INITIAL) {
-          this.advance(this.generator.next(props), props)
+          await this.advance(this.generator.next(props), props)
         } else {
           this.setState({
             state: WAITING_FOR_PROPS
           })
+        }
+      } else if (effect.type === 'CALL') {
+        await this.setStatePromise({
+          state: WAITING_FOR_PROMISE
+        })
+        try {
+          const value = await effect.fn.apply(effect.fn, effect.fn.args)
+          await this.advance(this.generator.next(value), props)
+        } catch (error) {
+          await this.advance(this.generator.throw(error), props)
         }
       }
     }

@@ -6,6 +6,12 @@ exports[`runner will advance through multiple renders 1`] = `
 </p>
 `;
 
+exports[`runner will handle a rejected call effect properly 1`] = `
+<p>
+  Oops, something went wrong
+</p>
+`;
+
 exports[`runner will pass props to a ES2015 class component 1`] = `
 <GreetingClass
   name="nick"
@@ -42,5 +48,12 @@ exports[`runner will pass props to the takeProps effect 3`] = `
 exports[`runner will render properly 1`] = `
 <p>
   initial render
+</p>
+`;
+
+exports[`runner will run the call effect properly 1`] = `
+<p>
+  Hello 
+  nick
 </p>
 `;

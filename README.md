@@ -8,17 +8,17 @@ it themselves!
 
 ## Install
 ```
-npm i react-saga
+npm i react-suspense-saga
 ```
 or
 ```
-yarn add react-saga
+yarn add react-suspense-saga
 ```
 
 ## Quick Example
 ```jsx
-import runner from 'react-saga'
-import { call, render } from 'react-saga/effects'
+import runner from 'react-suspense-saga'
+import { call, render } from 'react-suspense-saga/effects'
 
 import Api from './Api'
 
@@ -94,7 +94,8 @@ const MyComponent = runner(function*() {
 ## render
 ```js
 render(
-  node: React.Node | React.Component
+  node: React.Node | React.Component,
+  extraArgs: Object?
 ): Effect
 ```
 
@@ -105,7 +106,7 @@ eg.
 const Loading = () => <p>Loading...</p>
 
 const MyComponent = runner(function*() {
-  yield render(Loading)
+  yield render(Loading) // props for MyComponent will get forwarded to this
   yield render(<p>my component</p>)
 })
 ```

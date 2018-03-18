@@ -12,6 +12,18 @@ exports[`runner delay works with multiple delayed renders 1`] = `
 </p>
 `;
 
+exports[`runner renders renders a class component 1`] = `
+<GreetingClass
+  name="nick"
+/>
+`;
+
+exports[`runner renders renders a stateless functional component 1`] = `
+<Greeting
+  name="nick"
+/>
+`;
+
 exports[`runner renders works for empty sagas 1`] = `""`;
 
 exports[`runner renders works for multiple initial renders 1`] = `
@@ -41,6 +53,19 @@ exports[`runner take props works with changing props 2`] = `
 `;
 
 exports[`runner take props works with initial props 1`] = `
+<p>
+  Hello 
+  nick
+</p>
+`;
+
+exports[`runner take props works with something that looks like redux 1`] = `
+<p>
+  Loading...
+</p>
+`;
+
+exports[`runner take props works with something that looks like redux 2`] = `
 <p>
   Hello 
   nick

@@ -1,7 +1,7 @@
-export function render(node) {
+export function render(nodeOrComponent) {
   return {
     type: 'RENDER',
-    node
+    nodeOrComponent
   }
 }
 

@@ -20,6 +20,22 @@ describe('runner', () => {
       yield render(<p>third initial render</p>)
     })
 
+    const Greeting = props => <p>Hello { props.name }</p>
+
+    const RenderSFCComponent = runner(function*() {
+      yield render(Greeting)
+    })
+
+    class GreetingClass extends React.Component {
+      render() {
+        return <p>{ this.props.name }</p>
+      }
+    }
+
+    const RenderClassComponent = runner(function*() {
+      yield render(GreetingClass)
+    })
+
     it('works for empty sagas', () => {
       const wrapper = shallow(<EmptyRender />)
       expect(wrapper).toMatchSnapshot()
@@ -32,6 +48,16 @@ describe('runner', () => {
 
     it('works for multiple initial renders', () => {
       const wrapper = shallow(<MultipleRenders />)
+      expect(wrapper).toMatchSnapshot()
+    })
+
+    it('renders a stateless functional component', () => {
+      const wrapper = shallow(<RenderSFCComponent name="nick" />)
+      expect(wrapper).toMatchSnapshot()
+    })
+
+    it('renders a class component', () => {
+      const wrapper = shallow(<RenderClassComponent name="nick" />)
       expect(wrapper).toMatchSnapshot()
     })
   })
@@ -82,6 +108,42 @@ describe('runner', () => {
       expect(wrapper).toMatchSnapshot()
       wrapper.setProps({ name: 'robert' })
       expect(wrapper).toMatchSnapshot()
+    })
+
+    const ChildComponent = runner(function*() {
+      while (true) {
+        const props = yield takeProps()
+        if (props.loading) {
+          yield render(<p>Loading...</p>)
+        } else {
+          yield render(<p>Hello {props.name}</p>)
+        }
+      }
+    })
+
+    class SomeConnectedComponent extends React.Component {
+      state = {
+        loading: true,
+        name: null
+      }
+
+      componentDidMount() {
+        setTimeout(() => {
+          this.setState({ loading: false, name: 'nick' })
+        }, 1000)
+      }
+
+      render () {
+        return <ChildComponent {...this.state} />
+      }
+    }
+
+    it('works with something that looks like redux', () => {
+      const wrapper = shallow(<SomeConnectedComponent />)
+      expect(wrapper.dive()).toMatchSnapshot()
+      jest.runAllTimers()
+      wrapper.update()
+      expect(wrapper.dive()).toMatchSnapshot()
     })
   })
 })

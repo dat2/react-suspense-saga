@@ -47,11 +47,15 @@ function run(createGenerator) {
       if (done) {
         return { done }
       } else if (effect.type === 'RENDER') {
+        const node = React.isValidElement(effect.nodeOrComponent) ?
+          effect.nodeOrComponent :
+          React.createElement(effect.nodeOrComponent, this.props)
+
         return {
           done,
           waitingForProps: false,
           stepGenerator: true,
-          node: effect.node,
+          node,
         }
       } else if (effect.type === 'DELAY') {
         setTimeout(this.stepGenerator, effect.ms)

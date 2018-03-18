@@ -6,10 +6,7 @@ export function render(nodeOrComponent) {
 }
 
 export function delay(ms) {
-  return {
-    type: 'DELAY',
-    ms
-  }
+  return call(() => new Promise(resolve => setTimeout(resolve, ms)))
 }
 
 export function takeProps() {

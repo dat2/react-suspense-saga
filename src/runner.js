@@ -1,80 +1,59 @@
 import React from 'react'
 
+const INITIAL = Symbol('INITIAL')
+const RENDERING = Symbol('RENDERING')
+const WAITING_FOR_PROPS = Symbol('WAITING_FOR_PROPS')
+const DONE = Symbol('DONE')
+
 function run(createGenerator) {
   class Runner extends React.Component {
     constructor(props, context) {
       super(props, context)
-      this.stepGenerator = this.stepGenerator.bind(this)
-      this.getNextState = this.getNextState.bind(this)
 
       this.generator = createGenerator()
       this.state = {
-        done: false,
-        waitingForProps: false,
-        stepGenerator: false,
+        state: INITIAL,
+        node: null,
+        data: null
       }
     }
 
     componentWillMount() {
-      this.stepGenerator()
+      this.advance(this.generator.next(), this.props)
     }
 
-    componentDidMount() {
-      this.stepGenerator()
-    }
-
-    componentDidUpdate() {
-      this.stepGenerator()
-    }
-
-    stepGenerator() {
-      this.setState(this.getNextState, () => {
-        if (this.state.stepGenerator) {
-          this.setState({ stepGenerator: false })
-          this.stepGenerator()
-        }
-      })
-    }
-
-    getGeneratorArgs(prevState, props) {
-      if (prevState.waitingForProps) {
-        return props
+    componentWillReceiveProps(nextProps) {
+      if (this.state.state === WAITING_FOR_PROPS) {
+        this.advance(this.generator.next(nextProps), nextProps)
       }
     }
 
-    getNextState(prevState, props) {
-      const { value: effect, done } = this.generator.next(this.getGeneratorArgs(prevState, props))
+    advance({ value: effect, done }, props) {
       if (done) {
-        return { done }
+        this.setState({
+          state: DONE
+        })
       } else if (effect.type === 'RENDER') {
-        const node = React.isValidElement(effect.nodeOrComponent) ?
-          effect.nodeOrComponent :
-          React.createElement(effect.nodeOrComponent, this.props)
+        const node = React.isValidElement(effect.nodeOrComponent)
+          ? effect.nodeOrComponent
+          : React.createElement(effect.nodeOrComponent, props)
 
-        return {
-          done,
-          waitingForProps: false,
-          stepGenerator: true,
-          node,
-        }
-      } else if (effect.type === 'DELAY') {
-        setTimeout(this.stepGenerator, effect.ms)
-        return {
-          done,
-          waitingForProps: false,
-          stepGenerator: false,
-        }
+        this.setState(
+          {
+            state: RENDERING,
+            node
+          },
+          () => {
+            this.advance(this.generator.next(), props)
+          }
+        )
       } else if (effect.type === 'TAKE_PROPS') {
-        return {
-          done,
-          waitingForProps: true,
-          stepGenerator: false,
-        }
-      } else {
-        return {
-          done,
-          waitingForProps: false,
-          stepGenerator: false
+        if (this.state.state === INITIAL) {
+          this.advance(this.generator.next(props), props)
+        } else {
+          this.setState({
+            state: WAITING_FOR_PROPS
+          })
         }
       }
     }

@@ -49,6 +49,31 @@ export default runner(greeter)
 
 # API Documentation
 
+## Call
+```js
+call(
+  func: (...args: Array<any>) => Promise<any>,
+  ...args: Array<any>
+): Effect
+```
+
+This will instruct the runner to return the results of the promise back to the
+generator when it `resolve`s or `reject`s.
+
+eg.
+```jsx
+const AsyncGreeting = runner(function*() {
+  yield render(<p>Loading...</p>)
+  try {
+    const response = yield call(fetch, '/api/user')
+    const user = yield call(() => response.json())
+    yield render(<p>Hello { user.name }!</p>)
+  } catch(e) {
+    yield render(<p>Something went wrong 🤔</p>)
+  }
+})
+```
+
 ## delay
 ```js
 delay(

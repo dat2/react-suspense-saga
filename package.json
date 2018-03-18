@@ -1,6 +1,6 @@
 {
   "name": "react-suspense-saga",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "redux-saga + react",
   "main": "./lib/index.js",
   "module": "./src/index.js",

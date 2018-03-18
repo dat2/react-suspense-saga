@@ -2,40 +2,75 @@ import React from 'react'
 
 function run(createGenerator) {
   class Runner extends React.Component {
-    constructor(...args) {
-      super(...args)
+    constructor(props, context) {
+      super(props, context)
       this.stepGenerator = this.stepGenerator.bind(this)
       this.getNextState = this.getNextState.bind(this)
 
       this.generator = createGenerator()
-      this.state = this.getNextState()
+      this.state = {
+        done: false,
+        waitingForProps: false,
+        stepGenerator: false,
+      }
+    }
+
+    componentWillMount() {
+      this.stepGenerator()
     }
 
     componentDidMount() {
       this.stepGenerator()
     }
 
-    stepGenerator() {
-      this.setState(this.getNextState)
+    componentDidUpdate() {
+      this.stepGenerator()
     }
 
-    getNextState(prevState) {
-      const { value: effect, done } = this.generator.next()
+    stepGenerator() {
+      this.setState(this.getNextState, () => {
+        if (this.state.stepGenerator) {
+          this.setState({ stepGenerator: false })
+          this.stepGenerator()
+        }
+      })
+    }
+
+    getGeneratorArgs(prevState, props) {
+      if (prevState.waitingForProps) {
+        return props
+      }
+    }
+
+    getNextState(prevState, props) {
+      const { value: effect, done } = this.generator.next(this.getGeneratorArgs(prevState, props))
       if (done) {
         return { done }
       } else if (effect.type === 'RENDER') {
         return {
           done,
-          node: effect.node
+          waitingForProps: false,
+          stepGenerator: true,
+          node: effect.node,
         }
       } else if (effect.type === 'DELAY') {
         setTimeout(this.stepGenerator, effect.ms)
         return {
-          done
+          done,
+          waitingForProps: false,
+          stepGenerator: false,
+        }
+      } else if (effect.type === 'TAKE_PROPS') {
+        return {
+          done,
+          waitingForProps: true,
+          stepGenerator: false,
         }
       } else {
         return {
-          done
+          done,
+          waitingForProps: false,
+          stepGenerator: false
         }
       }
     }

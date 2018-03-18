@@ -1,27 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`runner works for empty sagas 1`] = `""`;
-
-exports[`runner works for multiple initial renders 1`] = `
-<div>
-  second initial render
-</div>
-`;
-
-exports[`runner works for the initial render 1`] = `
-<div>
+exports[`runner delay works when the initial render is delayed 1`] = `
+<p>
   initial render
-</div>
+</p>
 `;
 
-exports[`runner works when the initial render is delayed 1`] = `
-<div>
-  initial render
-</div>
-`;
-
-exports[`runner works with multiple delayed renders 1`] = `
-<div>
+exports[`runner delay works with multiple delayed renders 1`] = `
+<p>
   second render
-</div>
+</p>
+`;
+
+exports[`runner renders works for empty sagas 1`] = `""`;
+
+exports[`runner renders works for multiple initial renders 1`] = `
+<p>
+  third initial render
+</p>
+`;
+
+exports[`runner renders works for single renders 1`] = `
+<p>
+  initial render
+</p>
+`;
+
+exports[`runner take props works with changing props 1`] = `
+<p>
+  Hello 
+  bob
+</p>
+`;
+
+exports[`runner take props works with changing props 2`] = `
+<p>
+  Hello 
+  robert
+</p>
+`;
+
+exports[`runner take props works with initial props 1`] = `
+<p>
+  Hello 
+  nick
+</p>
 `;
